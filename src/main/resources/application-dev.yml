@@ -1,0 +1,14 @@
+micronaut:
+  application:
+    name: myapp
+  test-resources:
+    enabled: true
+datasources:
+  default:
+    db-type: postgres
+    dialect: POSTGRES
+    driver-class-name: org.postgresql.Driver
+    username: test
+    password: test
+    schema-generate: CREATE_DROP
+    url: jdbc:tc:postgresql:15:///mydatabase

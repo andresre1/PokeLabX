@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.example
+testFramework: junit
+sourceLanguage: kotlin
+buildTool: gradle_kotlin
+features: [app-name, data, data-jpa, github-workflow-ci, gradle, hibernate-jpa, http-client-test, jackson-databind, jdbc-hikari, jul-to-slf4j, junit, kotlin, kotlin-application, ksp, liquibase, logback, micronaut-aop, micronaut-aot, micronaut-build, micronaut-http-validation, micronaut-test-rest-assured, mockito, mockserver-client-java, netty-server, openapi, postgres, readme, shade, static-resources, swagger-ui, test-resources, yaml, yaml-build]

@@ -1,0 +1,15 @@
+test-resources:
+  postgres:
+    enabled: true
+    image: "postgres:latest"
+    port: 5432
+    username: testuser
+    password: testpassword
+    database: testdb
+    wait-timeout: 30000
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: none
