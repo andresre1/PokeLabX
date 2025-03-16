@@ -1,12 +1,6 @@
 package com.pokelabx.service
 
-import jakarta.inject.Singleton
-import java.util.UUID
+interface PokemonService {
 
-@Singleton
-class PokemonService {
-
-    fun findById(id: UUID): String {
-        return "test"
-    }
+    fun findByIdOrName(idOrName: String): PokemonDetail
 }

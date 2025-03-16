@@ -9,19 +9,25 @@ micronaut:
       swagger-ui:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
-datasources:
-  default:
-    driver-class-name: org.postgresql.Driver
-    db-type: postgres
-    dialect: POSTGRES
-jpa.default.properties.hibernate.hbm2ddl.auto: none
-liquibase:
-  datasources:
-    default:
-      change-log: classpath:db/liquibase-changelog.xml
-jpa:
-  default:
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: none
+  http:
+    services:
+      pokeapi:
+        url: https://pokeapi.co
+        path: /api/v2
+
+#datasources:
+#  default:
+#    driver-class-name: org.postgresql.Driver
+#    db-type: postgres
+#    dialect: POSTGRES
+#jpa.default.properties.hibernate.hbm2ddl.auto: none
+#liquibase:
+#  datasources:
+#    default:
+#      change-log: classpath:db/liquibase-changelog.xml
+#jpa:
+#  default:
+#    properties:
+#      hibernate:
+#        hbm2ddl:
+#          auto: none

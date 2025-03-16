@@ -13,6 +13,7 @@ version = "0.1"
 group = "com.pokelabx"
 
 val kotlinVersion=project.properties.get("kotlinVersion")
+
 repositories {
     mavenCentral()
 }
@@ -22,13 +23,13 @@ dependencies {
     ksp("io.micronaut:micronaut-http-validation")
     ksp("io.micronaut.openapi:micronaut-openapi")
     implementation("io.micronaut:micronaut-aop")
-    implementation("io.micronaut:micronaut-jackson-databind")
+    implementation("io.micronaut.serde:micronaut-serde-jackson")
     implementation("io.micronaut.data:micronaut-data-hibernate-jpa")
     implementation("io.micronaut.data:micronaut-data-tx-hibernate")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
     implementation("io.micronaut.liquibase:micronaut-liquibase")
-    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
-    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
+//    implementation("io.micronaut.sql:micronaut-hibernate-jpa")
+//    implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     implementation("org.slf4j:jul-to-slf4j")
@@ -36,13 +37,16 @@ dependencies {
     compileOnly("io.micronaut.openapi:micronaut-openapi-annotations")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
-    runtimeOnly("org.postgresql:postgresql")
+//    runtimeOnly("org.postgresql:postgresql")
     runtimeOnly("org.yaml:snakeyaml")
     testImplementation("io.micronaut:micronaut-http-client")
     testImplementation("io.micronaut.test:micronaut-test-rest-assured")
     testImplementation("io.micronaut.testresources:micronaut-test-resources-extensions-junit-platform")
     testImplementation("org.mockito:mockito-core")
-
+    testImplementation("io.micronaut.test:micronaut-test-kotest5:${property("kotestVersion")}")
+    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
+    testImplementation("io.kotest:kotest-runner-junit5-jvm:${property("kotestJunit5JvmVersion")}")
+    testImplementation("org.wiremock:wiremock:${property("wiremockVersion")}")
 }
 
 
@@ -58,14 +62,12 @@ graalvmNative.toolchainDetection = false
 
 micronaut {
     runtime("netty")
-    testRuntime("junit5")
+    testRuntime("kotest5")
     processing {
         incremental(true)
         annotations("com.pokelabx.*")
     }
     aot {
-        // Please review carefully the optimizations enabled below
-        // Check https://micronaut-projects.github.io/micronaut-aot/latest/guide/ for more details
         optimizeServiceLoading = false
         convertYamlToJava = false
         precomputeOperations = true
