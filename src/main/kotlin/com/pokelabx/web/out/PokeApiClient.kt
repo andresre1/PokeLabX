@@ -11,4 +11,7 @@ interface PokeApiClient {
 
     @Get("/pokemon/{idOrName}")
     fun findByIdOrName(idOrName: String): PokemonDetailResponse
+
+    @Get
+    fun findByUrl(url: String): PokemonDetailResponse
 }

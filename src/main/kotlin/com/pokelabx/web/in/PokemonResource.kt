@@ -9,13 +9,13 @@ import io.micronaut.scheduling.annotation.ExecuteOn
 
 @Controller("/pokemon")
 class PokemonResource(
-    private val pokemonService: PokemonService
+    private val pokemonQueryUseCase: PokemonQueryUseCase
 ) {
 
     @ExecuteOn(BLOCKING)
     @Get("/{idOrName}")
     fun getPokemonByIdOrName(@PathVariable idOrName: String): PokemonDetailView {
-        return mapToPokemonDetailView(pokemonService.findByIdOrName(idOrName))
+        return mapToPokemonDetailView(pokemonQueryUseCase.findByIdOrName(idOrName))
     }
 
     private fun mapToPokemonDetailView(pokemon: PokemonDetail): PokemonDetailView {
@@ -24,26 +24,8 @@ class PokemonResource(
             name = pokemon.name,
             height = pokemon.height,
             weight = pokemon.weight,
-            abilities = pokemon.abilities.map { mapToAbilityEntryView(it) },
-            stats = pokemon.stats.map { mapToStatEntryView(it) },
             types = pokemon.types.map { mapToTypeEntryView(it) },
-            sprites = mapToSpritesView(pokemon.sprites)
-        )
-    }
-
-    private fun mapToAbilityEntryView(abilityEntry: AbilityEntry): AbilityEntryView {
-        return AbilityEntryView(
-            ability = AbilityView(abilityEntry.ability.name, abilityEntry.ability.url),
-            isHidden = abilityEntry.isHidden,
-            slot = abilityEntry.slot
-        )
-    }
-
-    private fun mapToStatEntryView(statEntry: StatEntry): StatEntryView {
-        return StatEntryView(
-            baseStat = statEntry.baseStat,
-            effort = statEntry.effort,
-            stat = StatView(statEntry.stat.name, statEntry.stat.url)
+            sprites = mapToSpritesView(pokemon.sprites),
         )
     }
 

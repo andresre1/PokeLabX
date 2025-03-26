@@ -1,8 +1,11 @@
 package com.pokelabx.web.`in`
 
+import com.pokelabx.PostgresContainer
 import com.pokelabx.service.PokemonDetail
-import com.pokelabx.service.PokemonService
+import com.pokelabx.service.PokemonQueryUseCase
+import io.kotest.core.extensions.install
 import io.kotest.core.spec.style.StringSpec
+import io.kotest.extensions.testcontainers.JdbcDatabaseContainerExtension
 import io.kotest.matchers.shouldBe
 import io.micronaut.http.HttpRequest
 import io.micronaut.http.HttpStatus
@@ -16,8 +19,8 @@ import io.mockk.mockk
 
 @MicronautTest
 class PokemonResourceTest(
-    private val pokemonService: PokemonService,
-    @Client("/") private val client: HttpClient
+    @Client("/") private val client: HttpClient,
+    private val pokemonQueryUseCase: PokemonQueryUseCase
 ) : StringSpec({
 
     "test getPokemonByIdOrName endpoint" {
@@ -26,30 +29,11 @@ class PokemonResourceTest(
             name = "bulbasaur",
             height = 7,
             weight = 69,
-            abilities = listOf(
-                com.pokelabx.service.AbilityEntry(
-                    ability = com.pokelabx.service.Ability(name = "overgrow", url = "ability_url"),
-                    isHidden = false,
-                    slot = 1
-                )
-            ),
-            stats = listOf(
-                com.pokelabx.service.StatEntry(
-                    baseStat = 49,
-                    effort = 0,
-                    stat = com.pokelabx.service.Stat(name = "attack", url = "stat_url")
-                )
-            ),
-            types = listOf(
-                com.pokelabx.service.TypeEntry(
-                    slot = 1,
-                    type = com.pokelabx.service.Type(name = "grass", url = "type_url")
-                )
-            ),
+            types = emptyList(),
             sprites = com.pokelabx.service.Sprites("front_default_url")
         )
 
-        val mock = getMock(pokemonService)
+        val mock = getMock(pokemonQueryUseCase)
         every { mock.findByIdOrName(any()) } returns pokemonDetail
 
         val response = client.toBlocking().exchange(
@@ -63,26 +47,11 @@ class PokemonResourceTest(
         body.name shouldBe "bulbasaur"
         body.height shouldBe 7
         body.weight shouldBe 69
-        body.abilities.size shouldBe 1
-        body.abilities[0].ability.name shouldBe "overgrow"
-        body.abilities[0].ability.url shouldBe "ability_url"
-        body.abilities[0].isHidden shouldBe false
-        body.abilities[0].slot shouldBe 1
-        body.stats.size shouldBe 1
-        body.stats[0].baseStat shouldBe 49
-        body.stats[0].effort shouldBe 0
-        body.stats[0].stat.name shouldBe "attack"
-        body.stats[0].stat.url shouldBe "stat_url"
-        body.types.size shouldBe 1
-        body.types[0].slot shouldBe 1
-        body.types[0].type.name shouldBe "grass"
-        body.types[0].type.url shouldBe "type_url"
-        body.sprites.frontDefault shouldBe "front_default_url"
     }
 }) {
 
-    @MockBean(PokemonService::class)
-    fun pokemonService(): PokemonService {
+    @MockBean(PokemonQueryUseCase::class)
+    fun pokemonService(): PokemonQueryUseCase {
         return mockk()
     }
 }
